@@ -15,6 +15,12 @@ abstract class AbstractJob {
     protected $payload;
 
     /**
+     * @var int $status
+     * @see JobStatus For an enumeration of valid statuses.
+     */
+    protected $status;
+
+    /**
      * Construct a job for a payload.
      * 
      * @param mixed $payload Some payload that this worker can attempt to
@@ -24,6 +30,11 @@ abstract class AbstractJob {
     {
         $this->setStatus(JobStatus::NONE);
         $this->payload = $payload;
+    }
+
+    public function getPayload()
+    {
+        return $this->payload;
     }
 
     /**
