@@ -1,16 +1,16 @@
 <?php
 namespace CDavison\Queue;
 
-use JobInterface;
+use CDavison\Queue\AbstractJob;
 
 interface WorkerInterface
 {
     /**
      * Run a job on this worker.
      * 
-     * @param JobInterface $job
+     * @param AbstractJob $job
      * @return void The supplied job's status should be modified to indicate
      * progress.
      */
-    public function runJob(JobInterface $job);
+    public function runJob(AbstractJob $job);
 }
