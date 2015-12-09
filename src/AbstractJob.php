@@ -27,56 +27,6 @@ abstract class AbstractJob {
     }
 
     /**
-     * Mark this job as running.
-     * 
-     * @return void
-     */
-    public function run()
-    {
-        $this->setStatus(JobStatus::RUNNING);
-    }
-
-    /**
-     * Mark this job as completed.
-     * 
-     * @return void
-     */
-    public function complete()
-    {
-        $this->setStatus(JobStatus::COMPLETED);
-    }
-
-    /**
-     * Mark this job as failed.
-     * 
-     * @return void
-     */
-    public function fail()
-    {
-        $this->setStatus(JobStatus::FAILED);
-    }
-
-    /**
-     * Sleep this job.
-     *
-     * @return void
-     */
-    public function sleep()
-    {
-        $this->setStatus(JobStatus::SLEEPING);
-    }
-
-    /**
-     * Release the job back to the queue for collection.
-     *
-     * @return void
-     */
-    public function release()
-    {
-        $this->setStatus(JobStatus::RELEASED);
-    }
-
-    /**
      * Get the status of this worker.
      * 
      * @return int
