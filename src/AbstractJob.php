@@ -1,7 +1,7 @@
 <?php
 namespace CDavison\Queue;
 
-use JobStatus;
+use CDavison\Queue\JobStatus;
 
 abstract class AbstractJob {
     /**

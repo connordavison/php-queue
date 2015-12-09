@@ -10,7 +10,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "CDavison\\": "src/",
+            "CDavison\\Queue\\": "src/",
             "CDavison\\Test\\": "test/"
         }
     },

@@ -1,4 +1,6 @@
 <?php
+namespace CDavison\Queue;
+
 use MabeEnum\Enum;
 
 class JobStatus extends Enum
