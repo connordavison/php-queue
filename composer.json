@@ -1,0 +1,21 @@
+{
+    "name": "cdavison/queue",
+    "description": "A PHP datastore-agnostic API for developing job/batch queues.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "C. Davison",
+            "email": "connorpdavison@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "CDavison\\": "src/",
+            "CDavison\\Test\\": "test/"
+        }
+    },
+    "require": {
+        "phpunit/phpunit": "^5.1",
+        "marc-mabe/php-enum": "^2.2.0"
+    }
+}
