@@ -19,4 +19,9 @@ interface JobQueueInterface
      * @return JobInterface The next job to be processed.
      */
     public function pop();
+
+    /**
+     * @return int The size of this queue.
+     */
+    public function size();
 }
