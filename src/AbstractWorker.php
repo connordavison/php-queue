@@ -2,7 +2,7 @@
 namespace CDavison\Queue;
 
 use CDavison\Queue\AbstractJob;
-use CDavison\Queue\RelayInterface;
+use CDavison\Queue\JobRelayInterface;
 use CDavison\Queue\WorkerBusyException;
 
 use Psr\Log\LoggerAwareInterface;
@@ -16,9 +16,9 @@ abstract class AbstractWorker extends LoggerAwareInterface
      * Initialise this worker with a relay, through which a job's most recent
      * state may be ascertained.
      * 
-     * @param RelayInterface $relay
+     * @param JobRelayInterface $relay
      */
-    public function __construct(RelayInterface $relay)
+    public function __construct(JobRelayInterface $relay)
     {
         $this->relay = $relay;
     }
