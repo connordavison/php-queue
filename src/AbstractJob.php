@@ -32,9 +32,25 @@ abstract class AbstractJob {
         $this->payload = $payload;
     }
 
+    /**
+     * Retrieve the payload of this job.
+     * 
+     * @return mixed
+     */
     public function getPayload()
     {
         return $this->payload;
+    }
+
+    /**
+     * @return boolean True if this job has completed or failed.
+     */
+    public function isFinished()
+    {
+        return in_array(
+            $this->status,
+            [JobStatus::COMPLETED, JobStatus::FAILED]
+        );
     }
 
     /**
