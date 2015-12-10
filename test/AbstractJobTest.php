@@ -46,6 +46,14 @@ class AbstractJobTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @expectedException \DomainException
+     */
+    public function testSetStatusWithInvalidStatus()
+    {
+        $this->job->setStatus(-1);
+    }
+
     public function testGetStatus()
     {
         $this->job->setStatus(JobStatus::SLEEPING);
