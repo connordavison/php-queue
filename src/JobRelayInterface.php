@@ -1,7 +1,7 @@
 <?php
 namespace CDavison\Queue;
 
-use CDavison\Queue\AbstractJob;
+use CDavison\Queue\JobInterface;
 
 /**
  * A relay allows reading & writing to the most recent state of a job.
@@ -11,15 +11,15 @@ interface JobRelayInterface
     /**
      * Retrieve a job from the relay.
      * 
-     * @param AbstractJob $job
-     * @return AbstractJob
+     * @param JobInterface $job
+     * @return JobInterface
      */
-    public function get(AbstractJob $job);
+    public function get(JobInterface $job);
 
     /**
      * Persist a job to the relay.
      * 
-     * @param AbstractJob $job
+     * @param JobInterface $job
      */
-    public function put(AbstractJob $job);
+    public function put(JobInterface $job);
 }
