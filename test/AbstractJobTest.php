@@ -1,63 +1,133 @@
 <?php
 namespace CDavison\Test\Queue;
 
-use CDavison\Queue\AbstractJob;
 use CDavison\Queue\JobStatus;
 
 use PHPUnit_Framework_Assert as Assert;
 
 class AbstractJobTest extends \PHPUnit_Framework_TestCase
 {
-    public static $default_payload = 123;
+    public static $default_payload;
 
     public function setUp()
     {
         $this->job = $this->getMockForAbstractClass(
-            'CDavison\Queue\AbstractJob',
-            [self::$default_payload] // Inject default payload into constructor
+            'CDavison\Queue\AbstractJob', [self::$default_payload]
         );
     }
 
-    public function testConstructor()
+    public function testConstruct()
     {
-        $this->assertEquals(
-            JobStatus::NONE,
-            Assert::readAttribute($this->job, 'status')
-        );
-
-        $this->assertEquals(
-            self::$default_payload,
-            Assert::readAttribute($this->job, 'payload')
-        );
-    }
-
-    public function testGetPayload()
-    {
-        $this->assertEquals(self::$default_payload, $this->job->getPayload());
-    }
-
-    public function testSetStatus()
-    {
-        $this->job->setStatus(JobStatus::WAITING);
-
-        $this->assertEquals(
-            JobStatus::WAITING,
-            Assert::readAttribute($this->job, 'status')
-        );
+        // ...?
     }
 
     /**
-     * @expectedException \DomainException
+     * @dataProvider statusGetterProvider
      */
-    public function testSetStatusWithInvalidStatus()
+    public function testStatusGetters($status, $descriptions)
     {
-        $this->job->setStatus(-1);
+        foreach ($descriptions as $method => $expected) {
+            $job = $this->getMockForAbstractClass(
+                'CDavison\Queue\AbstractJob', [self::$default_payload]
+            );
+
+            $job->method('getStatus')->willReturn($status);
+            $this->assertEquals($expected, $job->$method());
+        }
     }
 
-    public function testGetStatus()
+    /**
+     * @dataProvider statusSetterProvider
+     */
+    public function testStatusSetters($method, $status)
     {
-        $this->job->setStatus(JobStatus::SLEEPING);
+        $this->job->expects($this->once())
+            ->method('setStatus')
+            ->with($status);
 
-        $this->assertEquals(JobStatus::SLEEPING, $this->job->getStatus());
+        $this->job->$method();
+    }
+
+    /**
+     * Provides a list of statuses along with a description.
+     */
+    public function statusGetterProvider()
+    {
+        return [
+            [
+                JobStatus::NONE,
+                [
+                    'isStarted'   => false,
+                    'isSleeping'  => false,
+                    'isCompleted' => false,
+                    'isFailed'    => false,
+                    'isFinished'  => false,
+                ],
+            ],
+            [
+                JobStatus::WAITING,
+                [
+                    'isStarted'   => false,
+                    'isSleeping'  => false,
+                    'isCompleted' => false,
+                    'isFailed'    => false,
+                    'isFinished'  => false,
+                ],
+            ],
+            [
+                JobStatus::RUNNING,
+                [
+                    'isStarted'   => true,
+                    'isSleeping'  => false,
+                    'isCompleted' => false,
+                    'isFailed'    => false,
+                    'isFinished'  => false,
+                ],
+            ],
+            [
+                JobStatus::SLEEPING,
+                [
+                    'isStarted'   => true,
+                    'isSleeping'  => true,
+                    'isCompleted' => false,
+                    'isFailed'    => false,
+                    'isFinished'  => false,
+                ],
+            ],
+            [
+                JobStatus::COMPLETED,
+                [
+                    'isStarted'   => true,
+                    'isSleeping'  => false,
+                    'isCompleted' => true,
+                    'isFailed'    => false,
+                    'isFinished'  => true,
+                ],
+            ],
+            [
+                JobStatus::FAILED,
+                [
+                    'isStarted'   => true,
+                    'isSleeping'  => false,
+                    'isCompleted' => false,
+                    'isFailed'    => true,
+                    'isFinished'  => true,
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Provided a list of status setting methods along with the expected status
+     * to be set.
+     */
+    public function statusSetterProvider()
+    {
+        return [
+            ['start',    JobStatus::RUNNING],
+            ['sleep',    JobStatus::SLEEPING],
+            ['fail',     JobStatus::FAILED],
+            ['complete', JobStatus::COMPLETED],
+        ];
     }
 }
