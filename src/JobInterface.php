@@ -8,22 +8,22 @@ interface JobInterface
     /**
      * @return boolean True if this job has completed.
      */
-    public function hasCompleted();
+    public function isCompleted();
 
     /**
      * @return boolean True if this job has failed.
      */
-    public function hasFailed();
+    public function isFailed();
 
     /**
      * @return boolean True if this job has finished.
      */
-    public function hasFinished();
+    public function isFinished();
 
     /**
      * @return boolean True if this job has started.
      */
-    public function hasStarted();
+    public function isStarted();
 
     /**
      * @return boolean True if this job is sleeping.
