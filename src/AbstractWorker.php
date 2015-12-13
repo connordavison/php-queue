@@ -8,7 +8,7 @@ use CDavison\Queue\WorkerBusyException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
-abstract class AbstractWorker extends LoggerAwareInterface
+abstract class AbstractWorker implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
