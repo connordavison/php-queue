@@ -60,7 +60,7 @@ abstract class AbstractJob {
     /**
      * @return boolean True if this job has completed.
      */
-    public function hasCompleted()
+    public function isCompleted()
     {
         return $this->getStatus() === JobStatus::COMPLETED;
     }
@@ -68,7 +68,7 @@ abstract class AbstractJob {
     /**
      * @return boolean True if this job has failed.
      */
-    public function hasFailed()
+    public function isFailed()
     {
         return $this->getStatus() === JobStatus::FAILED;
     }
@@ -76,7 +76,7 @@ abstract class AbstractJob {
     /**
      * @return boolean True if this job has finished.
      */
-    public function hasFinished()
+    public function isFinished()
     {
         $status = $this->getStatus();
 
@@ -87,7 +87,7 @@ abstract class AbstractJob {
     /**
      * @return boolean True if this job has started.
      */
-    public function hasStarted()
+    public function isStarted()
     {
         $status = $this->getStatus();
 

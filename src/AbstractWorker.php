@@ -22,7 +22,7 @@ abstract class AbstractWorker
      */
     public function isBusy()
     {
-        return isset($this->job) ? !$this->job->hasFinished() : false;
+        return isset($this->job) ? !$this->job->isFinished() : false;
     }
 
     /**
