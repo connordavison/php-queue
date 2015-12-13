@@ -8,8 +8,7 @@ interface JobQueueInterface
     /**
      * Push a job onto the queue.
      * 
-     * @param JobInterface $job 
-     * @return mixed
+     * @param JobInterface $job
      */
     public function push(JobInterface $job);
     
