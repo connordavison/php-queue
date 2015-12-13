@@ -3,7 +3,8 @@ namespace CDavison\Queue;
 
 use CDavison\Queue\JobStatus;
 
-abstract class AbstractJob {
+abstract class AbstractJob
+{
     /**
      * @var int $attempts The number of attempts.
      */
