@@ -15,12 +15,6 @@ abstract class AbstractJob {
     protected $payload;
 
     /**
-     * @var int $status
-     * @see JobStatus For an enumeration of valid statuses.
-     */
-    protected $status;
-
-    /**
      * Construct a job for a payload.
      * 
      * @param mixed $payload Some payload that this worker can attempt to
@@ -28,8 +22,8 @@ abstract class AbstractJob {
      */
     public function __construct($payload)
     {
+        $this->setPayload($payload);
         $this->setStatus(JobStatus::NONE);
-        $this->payload = $payload;
     }
 
     /**
@@ -37,20 +31,22 @@ abstract class AbstractJob {
      * 
      * @return mixed
      */
-    public function getPayload()
-    {
-        return $this->payload;
-    }
+    public abstract function getPayload();
+
+    /**
+     * Set the payload of this job.
+     *
+     * @param mixed $payload Some payload that this worker can attempt to
+     * process.
+     */
+    protected abstract function setPayload($payload);
 
     /**
      * Get the status of this worker.
      * 
      * @return int
      */
-    protected function getStatus()
-    {
-        return $this->status;
-    }
+    protected abstract function getStatus();
 
     /**
      * Set the status of this worker.
@@ -59,14 +55,7 @@ abstract class AbstractJob {
      * @throws \DomainException If the job status is invalid.
      * @see JobStatus For an enumeration of valid statuses.
      */
-    protected function setStatus($status)
-    {
-        if (!JobStatus::has($status)) {
-            throw new \DomainException("Invalid job status.");
-        }
-
-        $this->status = $status;
-    }
+    protected abstract function setStatus($status);
 
     /**
      * @return boolean True if this job has completed.
