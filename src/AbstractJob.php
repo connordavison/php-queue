@@ -43,22 +43,11 @@ abstract class AbstractJob {
     }
 
     /**
-     * @return boolean True if this job has completed or failed.
-     */
-    public function isFinished()
-    {
-        return in_array(
-            $this->status,
-            [JobStatus::COMPLETED, JobStatus::FAILED]
-        );
-    }
-
-    /**
      * Get the status of this worker.
      * 
      * @return int
      */
-    public function getStatus()
+    protected function getStatus()
     {
         return $this->status;
     }
@@ -70,12 +59,97 @@ abstract class AbstractJob {
      * @throws \DomainException If the job status is invalid.
      * @see JobStatus For an enumeration of valid statuses.
      */
-    public function setStatus($status)
+    protected function setStatus($status)
     {
         if (!JobStatus::has($status)) {
             throw new \DomainException("Invalid job status.");
         }
 
         $this->status = $status;
+    }
+
+    /**
+     * @return boolean True if this job has completed.
+     */
+    public function hasCompleted()
+    {
+        return $this->getStatus() === JobStatus::COMPLETED;
+    }
+
+    /**
+     * @return boolean True if this job has failed.
+     */
+    public function hasFailed()
+    {
+        return $this->getStatus() === JobStatus::FAILED;
+    }
+
+    /**
+     * @return boolean True if this job has finished.
+     */
+    public function hasFinished()
+    {
+        $status = $this->getStatus();
+
+        return JobStatus::COMPLETED === $status
+            || JobStatus::FAILED === $status;
+    }
+
+    /**
+     * @return boolean True if this job has started.
+     */
+    public function hasStarted()
+    {
+        $status = $this->getStatus();
+
+        return JobStatus::NONE !== $status && JobStatus::WAITING !== $status;
+    }
+
+    /**
+     * @return boolean True if this job is sleeping.
+     */
+    public function isSleeping()
+    {
+        return JobStatus::SLEEPING === $this->getStatus();
+    }
+
+    /**
+     * Mark this job as started.
+     *
+     * @return void
+     */
+    public function start()
+    {
+        $this->setStatus(JobStatus::RUNNING);
+    }
+
+    /**
+     * Mark this job as sleeping.
+     *
+     * @return void
+     */
+    public function sleep()
+    {
+        $this->setStatus(JobStatus::SLEEPING);
+    }
+
+    /**
+     * Mark this job as completed.
+     *
+     * @return void
+     */
+    public function complete()
+    {
+        $this->setStatus(JobStatus::COMPLETED);
+    }
+
+    /**
+     * Mark this job as failed.
+     *
+     * @return void
+     */
+    public function fail()
+    {
+        $this->setStatus(JobStatus::FAILED);
     }
 }
