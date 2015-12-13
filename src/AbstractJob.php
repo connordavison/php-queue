@@ -10,38 +10,6 @@ abstract class AbstractJob {
     protected $attempts;
 
     /**
-     * @var mixed $payload
-     */
-    protected $payload;
-
-    /**
-     * Construct a job for a payload.
-     * 
-     * @param mixed $payload Some payload that this worker can attempt to
-     * process.
-     */
-    public function __construct($payload)
-    {
-        $this->setPayload($payload);
-        $this->setStatus(JobStatus::NONE);
-    }
-
-    /**
-     * Retrieve the payload of this job.
-     * 
-     * @return mixed
-     */
-    public abstract function getPayload();
-
-    /**
-     * Set the payload of this job.
-     *
-     * @param mixed $payload Some payload that this worker can attempt to
-     * process.
-     */
-    protected abstract function setPayload($payload);
-
-    /**
      * Get the status of this worker.
      * 
      * @return int

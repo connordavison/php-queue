@@ -6,13 +6,6 @@ use CDavison\Queue\JobStatus;
 interface JobInterface
 {
     /**
-     * Retrieve the payload of this job.
-     * 
-     * @return mixed
-     */
-    public function getPayload();
-    
-    /**
      * @return boolean True if this job has completed.
      */
     public function hasCompleted();

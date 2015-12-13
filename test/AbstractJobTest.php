@@ -16,11 +16,6 @@ class AbstractJobTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testConstruct()
-    {
-        // ...?
-    }
-
     /**
      * @dataProvider statusGetterProvider
      */
