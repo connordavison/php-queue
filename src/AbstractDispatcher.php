@@ -1,7 +1,7 @@
 <?php
 namespace CDavison\Queue;
 
-use CDavison\Queue\AbstractJob;
+use CDavison\Queue\JobInterface;
 use CDavison\Queue\AbstractWorker;
 use CDavison\Queue\JobQueueInterface;
 
@@ -32,13 +32,13 @@ abstract class AbstractDispatcher
     /**
      * Attempt to dispatch a job to a worker.
      *
-     * @param AbstractJob $job The job to be dispatched.
+     * @param JobInterface $job The job to be dispatched.
      * @param WorkerInterface $worker The worker to which the job should be
      * dispatched.
      * @return void
      */
     protected abstract function dispatch(
-        AbstractJob $job,
+        JobInterface $job,
         WorkerInterface $worker
     );
 
