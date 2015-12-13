@@ -1,6 +1,9 @@
 <?php
 namespace CDavison\Queue;
 
+use CDavison\Queue\JobInterface;
+use CDavison\Queue\WorkerBusyException;
+
 interface WorkerInterface
 {
     /**
@@ -18,7 +21,7 @@ interface WorkerInterface
      * 
      * @return mixed The worker's status.
      */
-    public function getStatus();
+    public function isBusy();
 
     /**
      * Identify if this worker is able to support a job.
