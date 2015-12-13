@@ -2,8 +2,9 @@
 namespace CDavison\Queue;
 
 use CDavison\Queue\JobStatus;
+use CDavison\Queue\JobInterface;
 
-abstract class AbstractJob
+abstract class AbstractJob implements JobInterface
 {
     /**
      * @var int $attempts The number of attempts.
