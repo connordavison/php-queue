@@ -3,8 +3,9 @@ namespace CDavison\Queue;
 
 use CDavison\Queue\JobInterface;
 use CDavison\Queue\WorkerBusyException;
+use CDavison\Queue\WorkerInterface;
 
-abstract class AbstractWorker
+abstract class AbstractWorker implements WorkerInterface
 {
     /**
      * Run a job on this worker.
