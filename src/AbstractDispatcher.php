@@ -18,6 +18,13 @@ abstract class AbstractDispatcher
     protected $workers;
 
     /**
+     * Milliseconds to sleep between loops.
+     * 
+     * @var int
+     */
+    protected $loop_timeout = 10000;
+
+    /**
      * Initialise a dispatcher on a queue with a list of workers to use.
      *
      * @param JobQueueInterface $queue
@@ -51,6 +58,7 @@ abstract class AbstractDispatcher
     {
         while (true) {
             $this->loop();
+            usleep(1E3 * $this->loop_timeout);
         }
     }
 
