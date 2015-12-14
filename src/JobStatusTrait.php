@@ -2,15 +2,9 @@
 namespace CDavison\Queue;
 
 use CDavison\Queue\JobStatus;
-use CDavison\Queue\JobInterface;
 
-abstract class AbstractJob implements JobInterface
+trait JobStatusTrait
 {
-    /**
-     * @var int $attempts The number of attempts.
-     */
-    protected $attempts;
-
     /**
      * Get the status of this worker.
      * 

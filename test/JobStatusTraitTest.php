@@ -5,15 +5,13 @@ use CDavison\Queue\JobStatus;
 
 use PHPUnit_Framework_Assert as Assert;
 
-class AbstractJobTest extends \PHPUnit_Framework_TestCase
+class JobStatusTraitTest extends \PHPUnit_Framework_TestCase
 {
     public static $default_payload;
 
     public function setUp()
     {
-        $this->job = $this->getMockForAbstractClass(
-            'CDavison\Queue\AbstractJob', [self::$default_payload]
-        );
+        $this->job = $this->getMockForTrait('CDavison\Queue\JobStatusTrait');
     }
 
     /**
@@ -22,10 +20,7 @@ class AbstractJobTest extends \PHPUnit_Framework_TestCase
     public function testStatusGetters($status, $descriptions)
     {
         foreach ($descriptions as $method => $expected) {
-            $job = $this->getMockForAbstractClass(
-                'CDavison\Queue\AbstractJob', [self::$default_payload]
-            );
-
+            $job = $this->getMockForTrait('CDavison\Queue\JobStatusTrait');
             $job->method('getStatus')->willReturn($status);
             $this->assertEquals($expected, $job->$method());
         }
