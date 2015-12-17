@@ -13,7 +13,7 @@ abstract class AbstractDispatcher
     protected $queue;
 
     /**
-     * @var AbstractWorker[] $workers
+     * @var WorkerInterface[] $workers
      */
     protected $workers;
 
