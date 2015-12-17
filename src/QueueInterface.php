@@ -3,7 +3,7 @@ namespace CDavison\Queue;
 
 use CDavison\Queue\JobInterface;
 
-interface JobQueueInterface
+interface QueueInterface
 {
     /**
      * Push a job onto the queue.

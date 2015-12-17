@@ -1,10 +1,10 @@
 <?php
 namespace CDavison\Queue\Queues;
 
-use CDavison\Queue\JobQueueInterface;
+use CDavison\Queue\QueueInterface;
 use CDavison\Queue\JobInterface;
 
-class SyncJobQueue implements JobQueueInterface
+class SyncJobQueue implements QueueInterface
 {
     /**
      * The jobs left in this queue.

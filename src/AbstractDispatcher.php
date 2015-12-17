@@ -3,17 +3,17 @@ namespace CDavison\Queue;
 
 use CDavison\Queue\JobInterface;
 use CDavison\Queue\AbstractWorker;
-use CDavison\Queue\JobQueueInterface;
+use CDavison\Queue\QueueInterface;
 
 abstract class AbstractDispatcher
 {
     /**
-     * @var JobQueueInterface $queue
+     * @var QueueInterface $queue
      */
     protected $queue;
 
     /**
-     * @var WorkerInterface[] $workers
+     * @var AbstractWorker[] $workers
      */
     protected $workers;
 
@@ -27,10 +27,10 @@ abstract class AbstractDispatcher
     /**
      * Initialise a dispatcher on a queue with a list of workers to use.
      *
-     * @param JobQueueInterface $queue
+     * @param QueueInterface $queue
      * @param array $workers
      */
-    public function __construct(JobQueueInterface $queue, array $workers)
+    public function __construct(QueueInterface $queue, array $workers)
     {
         $this->queue = $queue;
         $this->workers = $workers;
