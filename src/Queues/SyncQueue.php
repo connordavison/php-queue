@@ -4,11 +4,11 @@ namespace CDavison\Queue\Queues;
 use CDavison\Queue\QueueInterface;
 use CDavison\Queue\JobInterface;
 
-class SyncJobQueue implements QueueInterface
+class SyncQueue implements QueueInterface
 {
     /**
      * The jobs left in this queue.
-     * 
+     *
      * @var array
      */
     protected $jobs = array();
