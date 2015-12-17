@@ -1,5 +1,5 @@
 <?php
-namespace CDavison\Queue;
+namespace CDavison\Queue\Queues;
 
 use CDavison\Queue\JobQueueInterface;
 use CDavison\Queue\JobInterface;
