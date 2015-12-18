@@ -2,7 +2,7 @@
 namespace CDavison\Queue;
 
 use CDavison\Queue\JobInterface;
-use CDavison\Queue\AbstractWorker;
+use CDavison\Queue\WorkerInterface;
 use CDavison\Queue\QueueInterface;
 
 abstract class AbstractDispatcher
@@ -13,13 +13,13 @@ abstract class AbstractDispatcher
     protected $queue;
 
     /**
-     * @var AbstractWorker[] $workers
+     * @var WorkerInterface[] $workers
      */
     protected $workers;
 
     /**
      * Milliseconds to sleep between loops.
-     * 
+     *
      * @var int
      */
     protected $loop_timeout = 10000;
