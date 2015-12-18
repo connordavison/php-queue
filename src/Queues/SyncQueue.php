@@ -26,7 +26,7 @@ class SyncQueue implements QueueInterface
      */
     public function pop()
     {
-        return array_shift($this->jobs);
+        return array_pop($this->jobs);
     }
 
     /**
