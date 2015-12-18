@@ -7,11 +7,6 @@ use CDavison\Queue\QueueInterface;
 interface DispatcherInterface
 {
     /**
-     * @var QueueInterface $queue
-     */
-    protected $queue;
-
-    /**
      * Run this dispatcher.
      *
      * @return void
