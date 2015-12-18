@@ -10,7 +10,7 @@ class AbstractDispatcherTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->worker = $this->getMock('CDavison\Queue\WorkerInterface');
-        $this->queue = $this->getMock('CDavison\Queue\JobQueueInterface');
+        $this->queue = $this->getMock('CDavison\Queue\QueueInterface');
 
         $this->dispatcher = $this->getMockForAbstractClass(
             'CDavison\Queue\AbstractDispatcher', [$this->queue, [$this->worker]]
