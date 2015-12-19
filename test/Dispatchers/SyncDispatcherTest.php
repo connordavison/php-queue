@@ -21,7 +21,6 @@ class SyncDispatcherTest extends \PHPUnit_Framework_TestCase
 
     public function testLoop()
     {
-        $this->worker->expects($this->any())->method('isBusy')->willReturn(false);
         $this->queue->expects($this->any())->method('size')->willReturn(123);
 
         $job = $this->getMock('CDavison\Queue\JobInterface');
@@ -32,27 +31,8 @@ class SyncDispatcherTest extends \PHPUnit_Framework_TestCase
         $this->loop->invoke($this->dispatcher);
     }
 
-    public function testLoopWithBusyWorker()
-    {
-        $this->worker->expects($this->any())->method('isBusy')->willReturn(true);
-        $this->queue->expects($this->any())->method('size')->willReturn(123);
-        $this->worker->expects($this->never())->method('run');
-
-        $this->loop->invoke($this->dispatcher);
-    }
-
     public function testLoopWithEmptyQueue()
     {
-        $this->worker->expects($this->any())->method('isBusy')->willReturn(false);
-        $this->queue->expects($this->any())->method('size')->willReturn(0);
-        $this->worker->expects($this->never())->method('run');
-
-        $this->loop->invoke($this->dispatcher);
-    }
-
-    public function testLoopWithBusyWorkerAndEmptyQueue()
-    {
-        $this->worker->expects($this->any())->method('isBusy')->willReturn(true);
         $this->queue->expects($this->any())->method('size')->willReturn(0);
         $this->worker->expects($this->never())->method('run');
 
