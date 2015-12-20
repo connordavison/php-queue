@@ -1,6 +1,4 @@
 <?php
-namespace CDavison\Test\Queue;
-
 use CDavison\Queue\JobStatus;
 
 use PHPUnit_Framework_Assert as Assert;

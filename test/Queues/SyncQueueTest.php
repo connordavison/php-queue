@@ -1,6 +1,4 @@
 <?php
-namespace CDavison\Test\Queue;
-
 use CDavison\Queue\Queues\SyncQueue;
 
 use PHPUnit_Framework_Assert as Assert;
