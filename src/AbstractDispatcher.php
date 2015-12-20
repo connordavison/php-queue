@@ -13,11 +13,11 @@ abstract class AbstractDispatcher implements DispatcherInterface
     protected $queue;
 
     /**
-     * Milliseconds to sleep between loops.
+     * Milliseconds to sleep before a worker can be redispatched.
      *
      * @var int
      */
-    protected $loop_timeout = 10E3;
+    protected $worker_timeout = 10E3;
 
     /**
      * Create an instance of this dispatcher.
@@ -42,7 +42,7 @@ abstract class AbstractDispatcher implements DispatcherInterface
     {
         while (true) {
             $this->loop();
-            usleep(1E3 * $this->loop_timeout);
+            usleep(1E3 * $this->getWorkerTimeout());
         }
     }
 
@@ -71,5 +71,25 @@ abstract class AbstractDispatcher implements DispatcherInterface
     public function setWorker(WorkerInterface $worker)
     {
         $this->worker = $worker;
+    }
+
+    /**
+     * Set the timeout in milliseconds before a worker can be redispatched.
+     *
+     * @param int $worker_timeout
+     */
+    public function setWorkerTimeout($worker_timeout)
+    {
+        $this->worker_timeout = $worker_timeout;
+    }
+
+    /**
+     * Get the timeout in milliseconds before a worker can be redispatched.
+     *
+     * @return int
+     */
+    public function getWorkerTimeout()
+    {
+        return $this->worker_timeout;
     }
 }

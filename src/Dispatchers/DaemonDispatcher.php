@@ -36,7 +36,7 @@ class DaemonDispatcher extends AbstractDispatcher
      * @param WorkerInterface $worker
      * @return void
      */
-    protected function dispatch(JobInterface $job, WorkerInterface $worker)
+    protected function dispatch(JobInterface $job)
     {
         $pid = pcntl_fork();
 
@@ -45,8 +45,8 @@ class DaemonDispatcher extends AbstractDispatcher
         } else if ($pid) {
             $this->children[] = $pid;
         } else {
-            $worker->run($job);
-            usleep($this->loop_timeout * 1E3);
+            $this->worker->run($job);
+            usleep($this->getWorkerTimeout() * 1E3);
             die;
         }
     }
@@ -90,5 +90,15 @@ class DaemonDispatcher extends AbstractDispatcher
         if (false !== $index) {
             unset($this->children[$index]);
         }
+    }
+
+    /**
+     * Obtain the PIDs of the dispatched workers.
+     *
+     * @return int[]
+     */
+    public function getChildren()
+    {
+        return $this->children;
     }
 }
