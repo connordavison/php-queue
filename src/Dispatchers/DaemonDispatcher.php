@@ -5,18 +5,22 @@ use CDavison\Queue\AbstractDispatcher;
 use CDavison\Queue\JobInterface;
 use CDavison\Queue\QueueInterface;
 use CDavison\Queue\WorkerInterface;
+use Ko\ProcessManager;
 
 class DaemonDispatcher extends AbstractDispatcher
 {
     /**
-     * The PIDs of dispatched workers.
-     *
-     * @var int[]
+     * @var ProcessManager $manager
      */
-    protected $children = array();
+    protected $manager;
 
     /**
-     * {@inheritdoc}
+     * Construct a DaemonDispatcher.
+     *
+     * @param QueueInterface $queue The queue from which this dispatcher will
+     * pull jobs.
+     * @param WorkerInterface $worker The worker which should run jobs from the
+     * queue.
      * @param int $max_workers The maximum number of dispatched workers this
      * instance can support.
      */
@@ -27,32 +31,31 @@ class DaemonDispatcher extends AbstractDispatcher
     ) {
         parent::__construct($queue, $worker);
         $this->max_workers = $max_workers;
+
+        $this->setManager(new ProcessManager());
     }
 
     /**
      * Dispatch a job to a worker.
      *
      * @param JobInterface $job
-     * @param WorkerInterface $worker
      * @return void
      */
     protected function dispatch(JobInterface $job)
     {
-        $pid = pcntl_fork();
+        $worker = $this->worker;
+        $timeout = $this->getWorkerTimeout();
 
-        if (-1 === $pid) {
-            throw new \RuntimeException("Could not fork job to worker.");
-        } else if ($pid) {
-            $this->children[] = $pid;
-        } else {
-            $this->worker->run($job);
-            usleep($this->getWorkerTimeout() * 1E3);
-            die;
-        }
+        $this->manager->fork(
+            function (\Ko\Process $p) use ($worker, $job, $timeout) {
+                $worker->run($job);
+                usleep(1E3 * $timeout);
+            }
+        );
     }
 
     /**
-     * {@inheritdoc} This dispatcher defers loop timeout to post-dispatch.
+     * {@inheritdoc} This dispatcher defers worker timeout to post-dispatch.
      *
      * @return void
      */
@@ -66,39 +69,32 @@ class DaemonDispatcher extends AbstractDispatcher
     /**
      * {@inheritdoc}
      */
-    protected function loop()
+    public function loop()
     {
-        while (count($this->children) >= $this->max_workers) {
-            $this->wait();
-        }
-
-        if ($this->queue->size()) {
-            $this->dispatch($this->queue->pop(), $this->worker);
+        if ($this->manager->count() >= $this->max_workers) {
+            $this->manager->wait();
+        } else if ($this->queue->size()) {
+            $this->dispatch($this->queue->pop());
         }
     }
 
     /**
-     * Wait for a worker to finish.
+     * Set the process manager for this dispatcher.
      *
-     * @return void
+     * @param ProcessManager $manager
      */
-    protected function wait()
+    public function setManager(ProcessManager $manager)
     {
-        $pid = pcntl_wait($status);
-        $index = array_search($pid, $this->children);
-
-        if (false !== $index) {
-            unset($this->children[$index]);
-        }
+        $this->manager = $manager;
     }
 
     /**
-     * Obtain the PIDs of the dispatched workers.
+     * Get the process manager for this dispatcher.
      *
-     * @return int[]
+     * @return ProcessManager
      */
-    public function getChildren()
+    public function getManager()
     {
-        return $this->children;
+        return $this->manager;
     }
 }
