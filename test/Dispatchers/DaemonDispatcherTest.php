@@ -20,6 +20,10 @@ class DaemonDispatcherTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        if (!extension_loaded('pcntl')) {
+            $this->markTestSkipped("PCNTL extension not available.");
+        }
+
         self::$functions = $this->getMockBuilder('functions')
             ->setMethods(['usleep'])
             ->getMock();
