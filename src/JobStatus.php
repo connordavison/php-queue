@@ -1,9 +1,7 @@
 <?php
 namespace CDavison\Queue;
 
-use MabeEnum\Enum;
-
-class JobStatus extends Enum
+class JobStatus
 {
     /**
      * @var int NONE Indicates that no queue is aware of a job.
