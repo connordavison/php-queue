@@ -1,8 +1,6 @@
 <?php
-use CDavison\Queue\JobStatus;
-use CDavison\Queue\Dispatchers\SyncDispatcher;
 
-use PHPUnit_Framework_Assert as Assert;
+use CDavison\Queue\Dispatchers\SyncDispatcher;
 
 class SyncDispatcherTest extends \PHPUnit_Framework_TestCase
 {

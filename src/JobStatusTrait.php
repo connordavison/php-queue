@@ -1,28 +1,29 @@
 <?php
-namespace CDavison\Queue;
 
-use CDavison\Queue\JobStatus;
+namespace CDavison\Queue;
 
 trait JobStatusTrait
 {
     /**
      * Get the status of this worker.
-     * 
+     *
      * @return int
      */
-    protected abstract function getStatus();
+    abstract protected function getStatus();
 
     /**
      * Set the status of this worker.
      *
      * @param int $status
+     *
      * @throws \DomainException If the job status is invalid.
+     *
      * @see JobStatus For an enumeration of valid statuses.
      */
-    protected abstract function setStatus($status);
+    abstract protected function setStatus($status);
 
     /**
-     * @return boolean True if this job has completed.
+     * @return bool True if this job has completed.
      */
     public function isCompleted()
     {
@@ -30,7 +31,7 @@ trait JobStatusTrait
     }
 
     /**
-     * @return boolean True if this job has failed.
+     * @return bool True if this job has failed.
      */
     public function isFailed()
     {
@@ -38,7 +39,7 @@ trait JobStatusTrait
     }
 
     /**
-     * @return boolean True if this job has finished.
+     * @return bool True if this job has finished.
      */
     public function isFinished()
     {
@@ -49,7 +50,7 @@ trait JobStatusTrait
     }
 
     /**
-     * @return boolean True if this job has started.
+     * @return bool True if this job has started.
      */
     public function isStarted()
     {
@@ -59,7 +60,7 @@ trait JobStatusTrait
     }
 
     /**
-     * @return boolean True if this job is sleeping.
+     * @return bool True if this job is sleeping.
      */
     public function isSleeping()
     {

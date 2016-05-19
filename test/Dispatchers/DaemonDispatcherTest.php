@@ -1,8 +1,6 @@
 <?php
-namespace CDavison\Queue\Dispatchers;
 
-use CDavison\Queue\JobStatus;
-use CDavison\Queue\Dispatchers\DaemonDispatcher;
+namespace CDavison\Queue\Dispatchers;
 
 function usleep($time)
 {
@@ -14,14 +12,14 @@ class DaemonDispatcherTest extends \PHPUnit_Framework_TestCase
     public static $functions;
 
     const DISPATCHER = '\CDavison\Queue\Dispatchers\DaemonDispatcher';
-    const JOB        = '\CDavison\Queue\JobInterface';
-    const QUEUE      = '\CDavison\Queue\QueueInterface';
-    const WORKER     = '\CDavison\Queue\WorkerInterface';
+    const JOB = '\CDavison\Queue\JobInterface';
+    const QUEUE = '\CDavison\Queue\QueueInterface';
+    const WORKER = '\CDavison\Queue\WorkerInterface';
 
     public function setUp()
     {
         if (!extension_loaded('pcntl')) {
-            $this->markTestSkipped("PCNTL extension not available.");
+            $this->markTestSkipped('PCNTL extension not available.');
         }
 
         self::$functions = $this->getMockBuilder('functions')
@@ -66,6 +64,7 @@ class DaemonDispatcherTest extends \PHPUnit_Framework_TestCase
                     function ($callback) use ($process) {
                         // The callback should hit usleep & $worker->run()
                         $callback($process);
+
                         return true;
                     }
                 )

@@ -1,4 +1,5 @@
 <?php
+
 namespace CDavison\Queue;
 
 class JobStatus
@@ -20,13 +21,13 @@ class JobStatus
 
     /**
      * @var int SLEEPING Indicates that a job is sleeping and hasn't yet
-     * completed.
+     *          completed.
      */
     const SLEEPING = 3;
 
     /**
      * @var int RELEASED Indicates that a job has been released to its queue
-     * to be finished later.
+     *          to be finished later.
      */
     const RELEASED = 4;
 

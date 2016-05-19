@@ -1,10 +1,8 @@
 <?php
+
 namespace CDavison\Queue\Dispatchers;
 
 use CDavison\Queue\AbstractDispatcher;
-use CDavison\Queue\JobInterface;
-use CDavison\Queue\QueueInterface;
-use CDavison\Queue\WorkerInterface;
 
 class SyncDispatcher extends AbstractDispatcher
 {
