@@ -1,32 +1,31 @@
 <?php
-namespace CDavison\Queue;
 
-use CDavison\Queue\JobStatus;
+namespace CDavison\Queue;
 
 interface JobInterface
 {
     /**
-     * @return boolean True if this job has completed.
+     * @return bool True if this job has completed.
      */
     public function isCompleted();
 
     /**
-     * @return boolean True if this job has failed.
+     * @return bool True if this job has failed.
      */
     public function isFailed();
 
     /**
-     * @return boolean True if this job has finished.
+     * @return bool True if this job has finished.
      */
     public function isFinished();
 
     /**
-     * @return boolean True if this job has started.
+     * @return bool True if this job has started.
      */
     public function isStarted();
 
     /**
-     * @return boolean True if this job is sleeping.
+     * @return bool True if this job is sleeping.
      */
     public function isSleeping();
 

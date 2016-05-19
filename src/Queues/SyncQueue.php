@@ -1,8 +1,9 @@
 <?php
+
 namespace CDavison\Queue\Queues;
 
-use CDavison\Queue\QueueInterface;
 use CDavison\Queue\JobInterface;
+use CDavison\Queue\QueueInterface;
 
 class SyncQueue implements QueueInterface
 {
@@ -11,7 +12,7 @@ class SyncQueue implements QueueInterface
      *
      * @var array
      */
-    protected $jobs = array();
+    protected $jobs = [];
 
     /**
      * {@inheritdoc}

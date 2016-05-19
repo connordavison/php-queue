@@ -1,7 +1,6 @@
 <?php
-use CDavison\Queue\JobStatus;
 
-use PHPUnit_Framework_Assert as Assert;
+use CDavison\Queue\JobStatus;
 
 class JobStatusTraitTest extends \PHPUnit_Framework_TestCase
 {
@@ -100,8 +99,8 @@ class JobStatusTraitTest extends \PHPUnit_Framework_TestCase
                     'isCompleted' => false,
                     'isFailed'    => true,
                     'isFinished'  => true,
-                ]
-            ]
+                ],
+            ],
         ];
     }
 

@@ -1,7 +1,6 @@
 <?php
-namespace CDavison\Queue;
 
-use CDavison\Queue\WorkerInterface;
+namespace CDavison\Queue;
 
 class WorkerBusyException extends \Exception
 {
@@ -16,8 +15,8 @@ class WorkerBusyException extends \Exception
      * Create a busy worker exception.
      *
      * @param WorkerInterface The busy worker.
-     * @param string|null $message
-     * @param integer $code
+     * @param string|null     $message
+     * @param int             $code
      * @param \Exception|null $previous
      */
     public function __construct(
@@ -42,7 +41,7 @@ class WorkerBusyException extends \Exception
 
     /**
      * Retrieve the worker that generated this error.
-     * 
+     *
      * @return WorkerInterface
      */
     public function getWorker()

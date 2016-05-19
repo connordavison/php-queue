@@ -1,7 +1,6 @@
 <?php
-use CDavison\Queue\Queues\SyncQueue;
 
-use PHPUnit_Framework_Assert as Assert;
+use CDavison\Queue\Queues\SyncQueue;
 
 class SyncQueueTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,7 +34,7 @@ class SyncQueueTest extends \PHPUnit_Framework_TestCase
     {
         $queue = new SyncQueue();
 
-        $this->assertAttributeEquals(array(), 'jobs', $queue);
+        $this->assertAttributeEquals([], 'jobs', $queue);
 
         $queue->push($this->job_one);
 
@@ -64,5 +63,4 @@ class SyncQueueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->job_two, $queue->pop());
         $this->assertEquals(null, $queue->pop());
     }
-
 }
