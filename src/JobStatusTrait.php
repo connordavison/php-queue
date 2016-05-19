@@ -15,9 +15,7 @@ trait JobStatusTrait
      * Set the status of this worker.
      *
      * @param int $status
-     *
      * @throws \DomainException If the job status is invalid.
-     *
      * @see JobStatus For an enumeration of valid statuses.
      */
     abstract protected function setStatus($status);

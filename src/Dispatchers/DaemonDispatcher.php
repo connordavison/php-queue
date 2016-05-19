@@ -18,12 +18,12 @@ class DaemonDispatcher extends AbstractDispatcher
     /**
      * Construct a DaemonDispatcher.
      *
-     * @param QueueInterface  $queue       The queue from which this dispatcher will
-     *                                     pull jobs.
-     * @param WorkerInterface $worker      The worker which should run jobs from the
-     *                                     queue.
-     * @param int             $max_workers The maximum number of dispatched workers this
-     *                                     instance can support.
+     * @param QueueInterface $queue The queue from which this dispatcher will
+     *     pull jobs.
+     * @param WorkerInterface $worker The worker which should run jobs from the
+     *     queue.
+     * @param int $max_workers The maximum number of dispatched workers this
+     *     instance can support.
      */
     public function __construct(
         QueueInterface $queue,
@@ -40,7 +40,6 @@ class DaemonDispatcher extends AbstractDispatcher
      * Dispatch a job to a worker.
      *
      * @param JobInterface $job
-     *
      * @return void
      */
     protected function dispatch(JobInterface $job)

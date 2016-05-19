@@ -19,10 +19,10 @@ abstract class AbstractDispatcher implements DispatcherInterface
     /**
      * Create an instance of this dispatcher.
      *
-     * @param QueueInterface  $queue  The queue from which this dispatcher will
-     *                                pull jobs.
+     * @param QueueInterface $queue The queue from which this dispatcher will
+     *     pull jobs.
      * @param WorkerInterface $worker The worker which should run jobs from the
-     *                                queue.
+     *     queue.
      */
     public function __construct(QueueInterface $queue, WorkerInterface $worker)
     {
