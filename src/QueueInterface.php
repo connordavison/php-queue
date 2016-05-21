@@ -5,16 +5,16 @@ namespace CDavison\Queue;
 interface QueueInterface
 {
     /**
-     * Push a job onto the queue.
+     * Push a payload onto the queue.
      *
-     * @param JobInterface $job
+     * @param mixed $payload
      */
-    public function push(JobInterface $job);
+    public function push($payload);
 
     /**
      * Pop a job off the queue.
      *
-     * @return JobInterface The next job to be processed.
+     * @return mixed The next payload to be processed.
      */
     public function pop();
 

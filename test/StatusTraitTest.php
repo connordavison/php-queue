@@ -1,14 +1,20 @@
 <?php
 
-use CDavison\Queue\JobStatus;
+use CDavison\Queue\Status;
+use CDavison\Queue\StatusTrait;
 
 class JobStatusTraitTest extends \PHPUnit_Framework_TestCase
 {
     public static $default_payload;
 
+    /**
+     * @var StatusTrait | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $status_trait;
+
     public function setUp()
     {
-        $this->job = $this->getMockForTrait('CDavison\Queue\JobStatusTrait');
+        $this->status_trait = $this->getMockForTrait(StatusTrait::class);
     }
 
     /**
@@ -17,9 +23,9 @@ class JobStatusTraitTest extends \PHPUnit_Framework_TestCase
     public function testStatusGetters($status, $descriptions)
     {
         foreach ($descriptions as $method => $expected) {
-            $job = $this->getMockForTrait('CDavison\Queue\JobStatusTrait');
-            $job->method('getStatus')->willReturn($status);
-            $this->assertEquals($expected, $job->$method());
+            $status_trait = $this->getMockForTrait(StatusTrait::class);
+            $status_trait->method('getStatus')->willReturn($status);
+            $this->assertEquals($expected, $status_trait->$method());
         }
     }
 
@@ -28,11 +34,11 @@ class JobStatusTraitTest extends \PHPUnit_Framework_TestCase
      */
     public function testStatusSetters($method, $status)
     {
-        $this->job->expects($this->once())
+        $this->status_trait->expects($this->once())
             ->method('setStatus')
             ->with($status);
 
-        $this->job->$method();
+        $this->status_trait->$method();
     }
 
     /**
@@ -42,7 +48,7 @@ class JobStatusTraitTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                JobStatus::NONE,
+                Status::NONE,
                 [
                     'isStarted'   => false,
                     'isSleeping'  => false,
@@ -52,7 +58,7 @@ class JobStatusTraitTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             [
-                JobStatus::WAITING,
+                Status::WAITING,
                 [
                     'isStarted'   => false,
                     'isSleeping'  => false,
@@ -62,7 +68,7 @@ class JobStatusTraitTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             [
-                JobStatus::RUNNING,
+                Status::RUNNING,
                 [
                     'isStarted'   => true,
                     'isSleeping'  => false,
@@ -72,7 +78,7 @@ class JobStatusTraitTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             [
-                JobStatus::SLEEPING,
+                Status::SLEEPING,
                 [
                     'isStarted'   => true,
                     'isSleeping'  => true,
@@ -82,7 +88,7 @@ class JobStatusTraitTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             [
-                JobStatus::COMPLETED,
+                Status::COMPLETED,
                 [
                     'isStarted'   => true,
                     'isSleeping'  => false,
@@ -92,7 +98,7 @@ class JobStatusTraitTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             [
-                JobStatus::FAILED,
+                Status::FAILED,
                 [
                     'isStarted'   => true,
                     'isSleeping'  => false,
@@ -111,10 +117,10 @@ class JobStatusTraitTest extends \PHPUnit_Framework_TestCase
     public function statusSetterProvider()
     {
         return [
-            ['start',    JobStatus::RUNNING],
-            ['sleep',    JobStatus::SLEEPING],
-            ['fail',     JobStatus::FAILED],
-            ['complete', JobStatus::COMPLETED],
+            ['start',    Status::RUNNING],
+            ['sleep',    Status::SLEEPING],
+            ['fail',     Status::FAILED],
+            ['complete', Status::COMPLETED],
         ];
     }
 }

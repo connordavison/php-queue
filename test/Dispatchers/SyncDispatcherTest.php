@@ -1,37 +1,54 @@
 <?php
 
 use CDavison\Queue\Dispatchers\SyncDispatcher;
+use CDavison\Queue\QueueInterface;
+use CDavison\Queue\WorkerInterface;
 
 class SyncDispatcherTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var WorkerInterface | PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $worker;
+
+    /**
+     * @var QueueInterface | PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $queue;
+
+    /**
+     * @var SyncDispatcher | PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dispatcher;
+
     public function setUp()
     {
-        $this->worker = $this->getMock('CDavison\Queue\WorkerInterface');
-        $this->queue = $this->getMock('CDavison\Queue\QueueInterface');
-
-        $this->dispatcher = new SyncDispatcher($this->queue, $this->worker);
-
-        $this->loop = new \ReflectionMethod($this->dispatcher, 'loop');
-        $this->loop->setAccessible(true);
+        $this->queue = $this->getMock(QueueInterface::class);
+        $this->worker = $this->getMock(WorkerInterface::class);
     }
 
-    public function testLoop()
+    /**
+     * If the dispatcher is run when there is a non-empty queue, a job will be
+     * dispatched from that queue.
+     */
+    public function testRun()
     {
+        $dispatcher = new SyncDispatcher($this->queue, $this->worker);
         $this->queue->expects($this->any())->method('size')->willReturn(123);
-
-        $job = $this->getMock('CDavison\Queue\JobInterface');
-
-        $this->queue->expects($this->once())->method('pop')->willReturn($job);
-        $this->worker->expects($this->once())->method('run')->with($job);
-
-        $this->loop->invoke($this->dispatcher);
+        $this->queue->expects($this->once())->method('pop')->willReturn('test');
+        $this->worker->expects($this->once())->method('run')->with('test');
+        $dispatcher->run();
     }
 
-    public function testLoopWithEmptyQueue()
+    /**
+     * If the dispatcher is run when there is an empty queue, no dispatch will
+     * occur.
+     */
+    public function testRunWithEmptyQueue()
     {
+        $dispatcher = new SyncDispatcher($this->queue, $this->worker);
         $this->queue->expects($this->any())->method('size')->willReturn(0);
         $this->worker->expects($this->never())->method('run');
-
-        $this->loop->invoke($this->dispatcher);
+        $dispatcher->run();
     }
 }

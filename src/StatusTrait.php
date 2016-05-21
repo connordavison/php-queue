@@ -2,10 +2,10 @@
 
 namespace CDavison\Queue;
 
-trait JobStatusTrait
+trait StatusTrait
 {
     /**
-     * Get the status of this worker.
+     * Get the status of a job.
      *
      * @return int
      */
@@ -25,7 +25,7 @@ trait JobStatusTrait
      */
     public function isCompleted()
     {
-        return $this->getStatus() === JobStatus::COMPLETED;
+        return $this->getStatus() === Status::COMPLETED;
     }
 
     /**
@@ -33,7 +33,7 @@ trait JobStatusTrait
      */
     public function isFailed()
     {
-        return $this->getStatus() === JobStatus::FAILED;
+        return $this->getStatus() === Status::FAILED;
     }
 
     /**
@@ -43,8 +43,8 @@ trait JobStatusTrait
     {
         $status = $this->getStatus();
 
-        return JobStatus::COMPLETED === $status
-            || JobStatus::FAILED === $status;
+        return Status::COMPLETED === $status
+            || Status::FAILED === $status;
     }
 
     /**
@@ -54,7 +54,7 @@ trait JobStatusTrait
     {
         $status = $this->getStatus();
 
-        return JobStatus::NONE !== $status && JobStatus::WAITING !== $status;
+        return Status::NONE !== $status && Status::WAITING !== $status;
     }
 
     /**
@@ -62,7 +62,7 @@ trait JobStatusTrait
      */
     public function isSleeping()
     {
-        return JobStatus::SLEEPING === $this->getStatus();
+        return Status::SLEEPING === $this->getStatus();
     }
 
     /**
@@ -72,7 +72,7 @@ trait JobStatusTrait
      */
     public function start()
     {
-        $this->setStatus(JobStatus::RUNNING);
+        $this->setStatus(Status::RUNNING);
     }
 
     /**
@@ -82,7 +82,7 @@ trait JobStatusTrait
      */
     public function sleep()
     {
-        $this->setStatus(JobStatus::SLEEPING);
+        $this->setStatus(Status::SLEEPING);
     }
 
     /**
@@ -92,7 +92,7 @@ trait JobStatusTrait
      */
     public function complete()
     {
-        $this->setStatus(JobStatus::COMPLETED);
+        $this->setStatus(Status::COMPLETED);
     }
 
     /**
@@ -102,6 +102,6 @@ trait JobStatusTrait
      */
     public function fail()
     {
-        $this->setStatus(JobStatus::FAILED);
+        $this->setStatus(Status::FAILED);
     }
 }

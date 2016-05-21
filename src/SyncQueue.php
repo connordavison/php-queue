@@ -1,9 +1,6 @@
 <?php
 
-namespace CDavison\Queue\Queues;
-
-use CDavison\Queue\JobInterface;
-use CDavison\Queue\QueueInterface;
+namespace CDavison\Queue;
 
 class SyncQueue implements QueueInterface
 {
@@ -12,14 +9,14 @@ class SyncQueue implements QueueInterface
      *
      * @var array
      */
-    protected $jobs = [];
+    protected $payloads = [];
 
     /**
      * {@inheritdoc}
      */
-    public function push(JobInterface $job)
+    public function push($payload)
     {
-        array_unshift($this->jobs, $job);
+        array_unshift($this->payloads, $payload);
     }
 
     /**
@@ -27,7 +24,7 @@ class SyncQueue implements QueueInterface
      */
     public function pop()
     {
-        return array_pop($this->jobs);
+        return array_pop($this->payloads);
     }
 
     /**
@@ -35,6 +32,6 @@ class SyncQueue implements QueueInterface
      */
     public function size()
     {
-        return count($this->jobs);
+        return count($this->payloads);
     }
 }

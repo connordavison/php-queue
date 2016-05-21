@@ -14,13 +14,13 @@ class WorkerBusyException extends \Exception
     /**
      * Create a busy worker exception.
      *
-     * @param WorkerInterface The busy worker.
+     * @param WorkerInterface $worker The busy worker.
      * @param string|null     $message
      * @param int             $code
      * @param \Exception|null $previous
      */
     public function __construct(
-        $worker,
+        WorkerInterface $worker,
         $message = null,
         $code = 0,
         \Exception $previous = null
