@@ -28,8 +28,8 @@ class SyncDispatcherTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * If the dispatcher is run when there is a non-empty queue, a job will be
-     * dispatched from that queue.
+     * If the dispatcher is run when there is a non-empty queue, a payload will
+     * be dispatched from that queue.
      */
     public function testRun()
     {

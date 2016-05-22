@@ -12,7 +12,7 @@ interface QueueInterface
     public function push($payload);
 
     /**
-     * Pop a job off the queue.
+     * Pop a payload off the queue.
      *
      * @return mixed The next payload to be processed.
      */

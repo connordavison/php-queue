@@ -24,8 +24,8 @@ class SyncDispatcher extends AbstractDispatcher
      *
      * @return void
      */
-    public function dispatch($job)
+    public function dispatch($payload)
     {
-        $this->worker->run($job);
+        $this->worker->run($payload);
     }
 }

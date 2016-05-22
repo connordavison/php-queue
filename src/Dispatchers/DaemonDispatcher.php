@@ -58,27 +58,27 @@ class DaemonDispatcher extends AbstractDispatcher
     /**
      * Dispatch a job to a worker.
      *
-     * @param mixed $job
+     * @param mixed $payload
      * @return void
      */
-    public function dispatch($job)
+    public function dispatch($payload)
     {
-        $this->manager->fork($this->getDispatchAction($job));
+        $this->manager->fork($this->getDispatchAction($payload));
     }
 
     /**
      * Obtain this dispatcher's run procedure for a given job.
      *
-     * @param mixed $job
+     * @param mixed $payload
      * @return \Closure
      */
-    public function getDispatchAction($job)
+    public function getDispatchAction($payload)
     {
         $worker = $this->worker;
         $timeout = $this->getWorkerTimeout();
 
-        return function () use ($worker, $job, $timeout) {
-            $worker->run($job);
+        return function () use ($worker, $payload, $timeout) {
+            $worker->run($payload);
             usleep(1E3 * $timeout);
         };
     }

@@ -3,7 +3,7 @@
 use CDavison\Queue\Status;
 use CDavison\Queue\StatusTrait;
 
-class JobStatusTraitTest extends \PHPUnit_Framework_TestCase
+class StatusTraitTest extends \PHPUnit_Framework_TestCase
 {
     public static $default_payload;
 

@@ -17,10 +17,10 @@ interface DispatcherInterface
     /**
      * Dispatch a job through this interface.
      *
-     * @param mixed $job
+     * @param mixed $payload
      * @return void
      */
-    public function dispatch($job);
+    public function dispatch($payload);
 
     /**
      * Set the queue on which this dispatcher should run.

@@ -5,23 +5,23 @@ namespace CDavison\Queue;
 trait StatusTrait
 {
     /**
-     * Get the status of a job.
+     * Get the status of a object.
      *
      * @return int
      */
     abstract protected function getStatus();
 
     /**
-     * Set the status of this worker.
+     * Set the status of this object.
      *
      * @param int $status
-     * @throws \DomainException If the job status is invalid.
+     * @throws \DomainException If the object status is invalid.
      * @see JobStatus For an enumeration of valid statuses.
      */
     abstract protected function setStatus($status);
 
     /**
-     * @return bool True if this job has completed.
+     * @return bool True if this object has completed its task.
      */
     public function isCompleted()
     {
@@ -29,7 +29,7 @@ trait StatusTrait
     }
 
     /**
-     * @return bool True if this job has failed.
+     * @return bool True if this object has failed its task.
      */
     public function isFailed()
     {
@@ -37,7 +37,8 @@ trait StatusTrait
     }
 
     /**
-     * @return bool True if this job has finished.
+     * @return bool True if this object has finished (successfully or
+     *     unsuccessfully).
      */
     public function isFinished()
     {
@@ -48,7 +49,7 @@ trait StatusTrait
     }
 
     /**
-     * @return bool True if this job has started.
+     * @return bool True if this object has started a task.
      */
     public function isStarted()
     {
@@ -58,7 +59,7 @@ trait StatusTrait
     }
 
     /**
-     * @return bool True if this job is sleeping.
+     * @return bool True if this object is sleeping on the job.
      */
     public function isSleeping()
     {
@@ -66,7 +67,7 @@ trait StatusTrait
     }
 
     /**
-     * Mark this job as started.
+     * Mark this object as having started a task.
      *
      * @return void
      */
@@ -76,7 +77,7 @@ trait StatusTrait
     }
 
     /**
-     * Mark this job as sleeping.
+     * Mark this object as sleeping on the job.
      *
      * @return void
      */
@@ -86,7 +87,7 @@ trait StatusTrait
     }
 
     /**
-     * Mark this job as completed.
+     * Mark this object as having completed its task.
      *
      * @return void
      */
@@ -96,7 +97,7 @@ trait StatusTrait
     }
 
     /**
-     * Mark this job as failed.
+     * Mark this object as having failed its task.
      *
      * @return void
      */

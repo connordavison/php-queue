@@ -56,8 +56,9 @@ class DaemonDispatcherTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * When a job is given to the dispatcher, it should generate a procedure to
-     * execute that job. That procedure should be forked by the ProcessManager.
+     * When a payload is given to the dispatcher, it should generate a procedure
+     * to execute that payload. That procedure should be forked by the
+     * ProcessManager.
      */
     public function testDispatch()
     {
@@ -78,8 +79,8 @@ class DaemonDispatcherTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * When the job is dispatched, a timeout should occur, after which the
-     * worker associated with the dispatcher should consume the job.
+     * When a payload is dispatched, a timeout should occur, after which the
+     * worker associated with the dispatcher should consume the payload.
      */
     public function testDispatchAction()
     {
@@ -99,7 +100,7 @@ class DaemonDispatcherTest extends \PHPUnit_Framework_TestCase
 
     /**
      * If the dispatcher is run when there are free workers and a non-empty
-     * queue, a job should be dispatched from that queue.
+     * queue, a payload should be dispatched from that queue.
      */
     public function testRun()
     {
@@ -114,8 +115,8 @@ class DaemonDispatcherTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * If the dispatcher is run when no workers are available, no job should be
-     * dispatched.
+     * If the dispatcher is run when no workers are available, no dispatch
+     * should occur.
      */
     public function testRunWithNoFreeWorkers()
     {
