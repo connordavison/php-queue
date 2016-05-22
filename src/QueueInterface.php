@@ -2,7 +2,7 @@
 
 namespace CDavison\Queue;
 
-interface QueueInterface
+interface QueueInterface extends \Countable
 {
     /**
      * Push a payload onto the queue.
@@ -19,7 +19,7 @@ interface QueueInterface
     public function pop();
 
     /**
-     * @return int The size of this queue.
+     * @return int The number of payloads in this queue.
      */
-    public function size();
+    public function count();
 }

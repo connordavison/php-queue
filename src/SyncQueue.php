@@ -30,7 +30,7 @@ class SyncQueue implements QueueInterface
     /**
      * {@inheritdoc}
      */
-    public function size()
+    public function count()
     {
         return count($this->payloads);
     }

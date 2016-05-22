@@ -14,26 +14,26 @@ class SyncQueueTest extends \PHPUnit_Framework_TestCase
     {
         $queue = new SyncQueue();
 
-        $this->assertEquals(0, $queue->size());
+        $this->assertEquals(0, $queue->count());
 
         $queue->push('a');
         $queue->push('b');
         $queue->push('c');
 
-        $this->assertEquals(3, $queue->size());
+        $this->assertEquals(3, $queue->count());
 
         $this->assertEquals('a', $queue->pop());
 
-        $this->assertEquals(2, $queue->size());
+        $this->assertEquals(2, $queue->count());
 
         $this->assertEquals('b', $queue->pop());
 
-        $this->assertEquals(1, $queue->size());
+        $this->assertEquals(1, $queue->count());
 
         $queue->push('d');
         $queue->push('e');
 
-        $this->assertEquals(3, $queue->size());
+        $this->assertEquals(3, $queue->count());
 
         $this->assertEquals('c', $queue->pop());
         $this->assertEquals('d', $queue->pop());

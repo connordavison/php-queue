@@ -11,7 +11,7 @@ class SyncDispatcher extends AbstractDispatcher
      */
     public function run()
     {
-        if ($this->queue->size() === 0) {
+        if ($this->queue->count() === 0) {
             return;
         }
 

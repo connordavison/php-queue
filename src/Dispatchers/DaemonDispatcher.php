@@ -50,7 +50,7 @@ class DaemonDispatcher extends AbstractDispatcher
     {
         if ($this->manager->count() >= $this->max_workers) {
             $this->manager->wait();
-        } elseif ($this->queue->size()) {
+        } elseif ($this->queue->count()) {
             $this->dispatch($this->queue->pop());
         }
     }

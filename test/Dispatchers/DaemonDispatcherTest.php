@@ -107,7 +107,7 @@ class DaemonDispatcherTest extends \PHPUnit_Framework_TestCase
         $dispatcher = $this->getDispatcherMock(['dispatch']);
 
         $this->manager->expects($this->any())->method('count')->willReturn(0);
-        $this->queue->expects($this->any())->method('size')->willReturn(123);
+        $this->queue->expects($this->any())->method('count')->willReturn(123);
         $this->queue->expects($this->once())->method('pop')->willReturn('test');
 
         $dispatcher->expects($this->once())->method('dispatch')->with('test');
@@ -123,7 +123,7 @@ class DaemonDispatcherTest extends \PHPUnit_Framework_TestCase
         $dispatcher = $this->getDispatcherMock(['dispatch']);
 
         $this->manager->expects($this->any())->method('count')->willReturn(3);
-        $this->queue->expects($this->any())->method('size')->willReturn(0);
+        $this->queue->expects($this->any())->method('count')->willReturn(0);
 
         $dispatcher->expects($this->never())->method('dispatch');
         $dispatcher->run();
@@ -138,7 +138,7 @@ class DaemonDispatcherTest extends \PHPUnit_Framework_TestCase
         $dispatcher = $this->getDispatcherMock(['dispatch']);
 
         $this->manager->expects($this->any())->method('count')->willReturn(0);
-        $this->queue->expects($this->any())->method('size')->willReturn(0);
+        $this->queue->expects($this->any())->method('count')->willReturn(0);
 
         $dispatcher->expects($this->never())->method('dispatch');
         $dispatcher->run();

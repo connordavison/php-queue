@@ -34,7 +34,7 @@ class SyncDispatcherTest extends \PHPUnit_Framework_TestCase
     public function testRun()
     {
         $dispatcher = new SyncDispatcher($this->queue, $this->worker);
-        $this->queue->expects($this->any())->method('size')->willReturn(123);
+        $this->queue->expects($this->any())->method('count')->willReturn(123);
         $this->queue->expects($this->once())->method('pop')->willReturn('test');
         $this->worker->expects($this->once())->method('run')->with('test');
         $dispatcher->run();
@@ -47,7 +47,7 @@ class SyncDispatcherTest extends \PHPUnit_Framework_TestCase
     public function testRunWithEmptyQueue()
     {
         $dispatcher = new SyncDispatcher($this->queue, $this->worker);
-        $this->queue->expects($this->any())->method('size')->willReturn(0);
+        $this->queue->expects($this->any())->method('count')->willReturn(0);
         $this->worker->expects($this->never())->method('run');
         $dispatcher->run();
     }
