@@ -46,6 +46,14 @@ abstract class AbstractDispatcher implements DispatcherInterface
     abstract public function run();
 
     /**
+     * {@inheritdoc}
+     *
+     * @param mixed $payload
+     * @return void
+     */
+    abstract public function dispatch($payload);
+
+    /**
      * Set the queue on which this dispatcher should operate.
      *
      * @param QueueInterface $queue
