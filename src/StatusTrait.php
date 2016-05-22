@@ -16,7 +16,7 @@ trait StatusTrait
      *
      * @param int $status
      * @throws \DomainException If the object status is invalid.
-     * @see JobStatus For an enumeration of valid statuses.
+     * @see Status For an enumeration of valid statuses.
      */
     abstract protected function setStatus($status);
 
