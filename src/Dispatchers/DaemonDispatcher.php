@@ -2,8 +2,6 @@
 
 namespace CDavison\Queue\Dispatchers;
 
-use CDavison\Queue\AbstractDispatcher;
-use CDavison\Queue\JobInterface;
 use CDavison\Queue\QueueInterface;
 use CDavison\Queue\WorkerInterface;
 use Ko\ProcessManager;
@@ -14,6 +12,13 @@ class DaemonDispatcher extends AbstractDispatcher
      * @var ProcessManager
      */
     protected $manager;
+
+    /**
+     * The maximum number of workers that can be dispatched at any given time.
+     *
+     * @var int
+     */
+    protected $max_workers;
 
     /**
      * Construct a DaemonDispatcher.
@@ -37,46 +42,45 @@ class DaemonDispatcher extends AbstractDispatcher
     }
 
     /**
-     * Dispatch a job to a worker.
-     *
-     * @param JobInterface $job
-     * @return void
-     */
-    protected function dispatch(JobInterface $job)
-    {
-        $worker = $this->worker;
-        $timeout = $this->getWorkerTimeout();
-
-        $this->manager->fork(
-            function (\Ko\Process $p) use ($worker, $job, $timeout) {
-                $worker->run($job);
-                usleep(1E3 * $timeout);
-            }
-        );
-    }
-
-    /**
      * {@inheritdoc} This dispatcher defers worker timeout to post-dispatch.
      *
      * @return void
      */
     public function run()
     {
-        while (true) {
-            $this->loop();
+        if ($this->manager->count() >= $this->max_workers) {
+            $this->manager->wait();
+        } elseif ($this->queue->count()) {
+            $this->dispatch($this->queue->pop());
         }
     }
 
     /**
-     * {@inheritdoc}
+     * Dispatch a job to a worker.
+     *
+     * @param mixed $payload
+     * @return void
      */
-    public function loop()
+    public function dispatch($payload)
     {
-        if ($this->manager->count() >= $this->max_workers) {
-            $this->manager->wait();
-        } elseif ($this->queue->size()) {
-            $this->dispatch($this->queue->pop());
-        }
+        $this->manager->fork($this->getDispatchAction($payload));
+    }
+
+    /**
+     * Obtain this dispatcher's run procedure for a given job.
+     *
+     * @param mixed $payload
+     * @return \Closure
+     */
+    public function getDispatchAction($payload)
+    {
+        $worker = $this->worker;
+        $timeout = $this->getWorkerTimeout();
+
+        return function () use ($worker, $payload, $timeout) {
+            $worker->run($payload);
+            usleep(1E3 * $timeout);
+        };
     }
 
     /**

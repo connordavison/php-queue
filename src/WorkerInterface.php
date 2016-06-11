@@ -7,18 +7,18 @@ interface WorkerInterface
     /**
      * Run a job on this worker.
      *
-     * @param JobInterface $job
+     * @param mixed $payload
      * @throws WorkerBusyException If this worker is busy.
-     * @return void The supplied job's status should be modified to indicate
+     * @return void The supplied payload's status should be modified to indicate
      *     progress.
      */
-    public function run(JobInterface $job);
+    public function run($payload);
 
     /**
-     * Identify if this worker is able to support a job.
+     * Identify if this worker is able to support a payload.
      *
-     * @param JobInterface $job
-     * @return bool True if this worker can run $job.
+     * @param mixed $payload
+     * @return bool True if this worker can consume $payload.
      */
-    public function supports(JobInterface $job);
+    public function supports($payload);
 }

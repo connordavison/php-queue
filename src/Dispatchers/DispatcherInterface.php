@@ -1,15 +1,26 @@
 <?php
 
-namespace CDavison\Queue;
+namespace CDavison\Queue\Dispatchers;
+
+use CDavison\Queue\QueueInterface;
+use CDavison\Queue\WorkerInterface;
 
 interface DispatcherInterface
 {
     /**
-     * Run this dispatcher.
+     * Attempt to dispatch any available jobs to a worker.
      *
      * @return void
      */
     public function run();
+
+    /**
+     * Dispatch a job through this interface.
+     *
+     * @param mixed $payload
+     * @return void
+     */
+    public function dispatch($payload);
 
     /**
      * Set the queue on which this dispatcher should run.

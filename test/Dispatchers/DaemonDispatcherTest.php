@@ -2,6 +2,10 @@
 
 namespace CDavison\Queue\Dispatchers;
 
+use CDavison\Queue\QueueInterface;
+use CDavison\Queue\WorkerInterface;
+use Ko\ProcessManager;
+
 function usleep($time)
 {
     DaemonDispatcherTest::$functions->usleep($time);
@@ -9,12 +13,34 @@ function usleep($time)
 
 class DaemonDispatcherTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * A mock object that proxies native functions.
+     *
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     public static $functions;
 
-    const DISPATCHER = '\CDavison\Queue\Dispatchers\DaemonDispatcher';
-    const JOB = '\CDavison\Queue\JobInterface';
-    const QUEUE = '\CDavison\Queue\QueueInterface';
-    const WORKER = '\CDavison\Queue\WorkerInterface';
+    /**
+     * @var WorkerInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $worker;
+
+    /**
+     * @var QueueInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $queue;
+
+    /**
+     * @var ProcessManager | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $manager;
+
+    /**
+     * A partial mock of the test subject.
+     *
+     * @var DaemonDispatcher | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dispatcher;
 
     public function setUp()
     {
@@ -22,27 +48,43 @@ class DaemonDispatcherTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('PCNTL extension not available.');
         }
 
-        self::$functions = $this->getMockBuilder('functions')
-            ->setMethods(['usleep'])
-            ->getMock();
+        self::$functions = $this->getMock('functions', ['usleep']);
 
-        $this->worker = $this->getMock(self::WORKER);
-        $this->queue = $this->getMock(self::QUEUE);
-        $this->manager = $this->getMock('\Ko\ProcessManager');
-        $this->job = $this->getMock(self::JOB);
-
-        $this->dispatcher = $this->getMockBuilder(self::DISPATCHER)
-            ->setConstructorArgs([$this->queue, $this->worker, 3])
-            ->setMethods(['dispatch'])
-            ->getMock();
-
-        $this->dispatcher->setManager($this->manager);
-
-        $this->dispatch = new \ReflectionMethod(self::DISPATCHER, 'dispatch');
-        $this->dispatch->setAccessible(true);
+        $this->worker = $this->getMock(WorkerInterface::class);
+        $this->queue = $this->getMock(QueueInterface::class);
+        $this->manager = $this->getMock(ProcessManager::class);
     }
 
+    /**
+     * When a payload is given to the dispatcher, it should generate a procedure
+     * to execute that payload. That procedure should be forked by the
+     * ProcessManager.
+     */
     public function testDispatch()
+    {
+        $dispatcher = $this->getDispatcherMock(['getDispatchAction']);
+
+        $closure = function () {
+            // Do nothing!
+        };
+
+        $dispatcher->expects($this->once())
+            ->method('getDispatchAction')
+            ->with('testing')
+            ->willReturn($closure);
+
+        $this->manager->expects($this->once())
+            ->method('fork')
+            ->with($closure);
+
+        $dispatcher->dispatch('testing');
+    }
+
+    /**
+     * When a payload is dispatched, a timeout should occur, after which the
+     * worker associated with the dispatcher should consume the payload.
+     */
+    public function testDispatchAction()
     {
         $dispatcher = new DaemonDispatcher($this->queue, $this->worker, 3);
         $dispatcher->setManager($this->manager);
@@ -51,66 +93,75 @@ class DaemonDispatcherTest extends \PHPUnit_Framework_TestCase
             ->method('usleep')
             ->with($dispatcher->getWorkerTimeout() * 1E3);
 
-        $process = $this->getMockBuilder('\Ko\Process')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->worker->expects($this->once())->method('run')->with('testing');
 
-        $this->worker->expects($this->once())->method('run');
-
-        $this->manager->expects($this->once())
-            ->method('fork')
-            ->with(
-                $this->callback(
-                    function ($callback) use ($process) {
-                        // The callback should hit usleep & $worker->run()
-                        $callback($process);
-
-                        return true;
-                    }
-                )
-            );
+        $dispatcher->getDispatchAction('testing')->__invoke();
 
         $this->assertEmpty($dispatcher->getManager()->count());
-
-        $this->dispatch->invoke($dispatcher, $this->job);
     }
 
-    public function testLoopWithNoFreeWorkers()
+    /**
+     * If the dispatcher is run when there are free workers and a non-empty
+     * queue, a payload should be dispatched from that queue.
+     */
+    public function testRun()
     {
-        $this->manager->expects($this->once())->method('count')->willReturn(3);
-        $this->manager->expects($this->once())->method('wait');
+        $dispatcher = $this->getDispatcherMock(['dispatch']);
 
-        $this->dispatcher->expects($this->never())->method('dispatch');
-        $this->dispatcher->loop();
+        $this->manager->expects($this->any())->method('count')->willReturn(0);
+        $this->queue->expects($this->any())->method('count')->willReturn(123);
+        $this->queue->expects($this->once())->method('pop')->willReturn('test');
+
+        $dispatcher->expects($this->once())->method('dispatch')->with('test');
+        $dispatcher->run();
     }
 
-    public function testLoopWithFreeWorkersAndNonEmptyQueue()
+    /**
+     * If the dispatcher is run when no workers are available, no dispatch
+     * should occur.
+     */
+    public function testRunWithNoFreeWorkers()
     {
-        $this->manager->expects($this->once())->method('count')->willReturn(2);
-        $this->queue->expects($this->once())->method('size')->willReturn(123);
-        $this->queue->expects($this->once())
-            ->method('pop')
-            ->willReturn($this->job);
+        $dispatcher = $this->getDispatcherMock(['dispatch']);
 
-        $this->dispatcher->expects($this->once())
-            ->method('dispatch')
-            ->with($this->job);
+        $this->manager->expects($this->any())->method('count')->willReturn(3);
+        $this->queue->expects($this->any())->method('count')->willReturn(0);
 
-        $this->dispatcher->loop();
+        $dispatcher->expects($this->never())->method('dispatch');
+        $dispatcher->run();
     }
 
-    public function testLoopWithFreeWorkersAndEmptyQueue()
+    /**
+     * If the dispatcher is run when there are free workers but an empty queue,
+     * no dispatch should occur.
+     */
+    public function testRunWithEmptyQueue()
     {
-        $this->manager->expects($this->once())->method('count')->willReturn(2);
-        $this->queue->expects($this->once())->method('size')->willReturn(123);
-        $this->queue->expects($this->once())
-            ->method('pop')
-            ->willReturn($this->job);
+        $dispatcher = $this->getDispatcherMock(['dispatch']);
 
-        $this->dispatcher->expects($this->once())
-            ->method('dispatch')
-            ->with($this->job);
+        $this->manager->expects($this->any())->method('count')->willReturn(0);
+        $this->queue->expects($this->any())->method('count')->willReturn(0);
 
-        $this->dispatcher->loop();
+        $dispatcher->expects($this->never())->method('dispatch');
+        $dispatcher->run();
+    }
+
+    /**
+     * Get a DaemonDispatcher with the given methods as test doubles.
+     *
+     * @param string[] $methods
+     * @return DaemonDispatcher | \PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getDispatcherMock(array $methods)
+    {
+        $dispatcher = $this->getMock(
+            DaemonDispatcher::class,
+            $methods,
+            [$this->queue, $this->worker, 3]
+        );
+
+        $dispatcher->setManager($this->manager);
+
+        return $dispatcher;
     }
 }

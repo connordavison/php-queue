@@ -2,24 +2,24 @@
 
 namespace CDavison\Queue;
 
-interface QueueInterface
+interface QueueInterface extends \Countable
 {
     /**
-     * Push a job onto the queue.
+     * Push a payload onto the queue.
      *
-     * @param JobInterface $job
+     * @param mixed $payload
      */
-    public function push(JobInterface $job);
+    public function push($payload);
 
     /**
-     * Pop a job off the queue.
+     * Pop a payload off the queue.
      *
-     * @return JobInterface The next job to be processed.
+     * @return mixed The next payload to be processed.
      */
     public function pop();
 
     /**
-     * @return int The size of this queue.
+     * @return int The number of payloads in this queue.
      */
-    public function size();
+    public function count();
 }

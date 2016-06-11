@@ -2,19 +2,30 @@
 
 namespace CDavison\Queue\Dispatchers;
 
-use CDavison\Queue\AbstractDispatcher;
-
 class SyncDispatcher extends AbstractDispatcher
 {
     /**
-     * This is the main execution loop of the dispatcher.
+     * {@inheritdoc}
      *
      * @return void
      */
-    protected function loop()
+    public function run()
     {
-        if ($this->queue->size() > 0) {
-            $this->worker->run($this->queue->pop());
+        if ($this->queue->count() === 0) {
+            return;
         }
+
+        $this->dispatch($this->queue->pop());
+
+        usleep(1E3 * $this->getWorkerTimeout());
+    }
+    /**
+     * {@inheritdoc}
+     *
+     * @return void
+     */
+    public function dispatch($payload)
+    {
+        $this->worker->run($payload);
     }
 }

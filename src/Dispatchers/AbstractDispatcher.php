@@ -1,6 +1,9 @@
 <?php
 
-namespace CDavison\Queue;
+namespace CDavison\Queue\Dispatchers;
+
+use CDavison\Queue\QueueInterface;
+use CDavison\Queue\WorkerInterface;
 
 abstract class AbstractDispatcher implements DispatcherInterface
 {
@@ -10,7 +13,12 @@ abstract class AbstractDispatcher implements DispatcherInterface
     protected $queue;
 
     /**
-     * Milliseconds to sleep before a worker can be redispatched.
+     * @var WorkerInterface
+     */
+    protected $worker;
+
+    /**
+     * Milliseconds to sleep before a worker can be re-dispatched.
      *
      * @var int
      */
@@ -31,24 +39,19 @@ abstract class AbstractDispatcher implements DispatcherInterface
     }
 
     /**
-     * Run this dispatcher.
+     * {@inheritdoc}
      *
      * @return void
      */
-    public function run()
-    {
-        while (true) {
-            $this->loop();
-            usleep(1E3 * $this->getWorkerTimeout());
-        }
-    }
+    abstract public function run();
 
     /**
-     * This is the main execution loop of the dispatcher.
+     * {@inheritdoc}
      *
+     * @param mixed $payload
      * @return void
      */
-    abstract protected function loop();
+    abstract public function dispatch($payload);
 
     /**
      * Set the queue on which this dispatcher should operate.
@@ -61,6 +64,16 @@ abstract class AbstractDispatcher implements DispatcherInterface
     }
 
     /**
+     * Get the queue on which this dispatcher should operate.
+     *
+     * @return QueueInterface
+     */
+    public function getQueue()
+    {
+        return $this->queue;
+    }
+
+    /**
      * Set the worker which will complete jobs from the current queue.
      *
      * @param WorkerInterface $worker
@@ -68,6 +81,16 @@ abstract class AbstractDispatcher implements DispatcherInterface
     public function setWorker(WorkerInterface $worker)
     {
         $this->worker = $worker;
+    }
+
+    /**
+     * Get the worker which will complete jobs from the current queue.
+     *
+     * @return WorkerInterface
+     */
+    public function getWorker()
+    {
+        return $this->worker;
     }
 
     /**
