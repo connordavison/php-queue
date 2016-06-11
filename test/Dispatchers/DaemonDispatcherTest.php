@@ -64,7 +64,9 @@ class DaemonDispatcherTest extends \PHPUnit_Framework_TestCase
     {
         $dispatcher = $this->getDispatcherMock(['getDispatchAction']);
 
-        $closure = function () {};
+        $closure = function () {
+            // Do nothing!
+        };
 
         $dispatcher->expects($this->once())
             ->method('getDispatchAction')
