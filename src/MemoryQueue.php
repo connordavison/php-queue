@@ -2,7 +2,7 @@
 
 namespace CDavison\Queue;
 
-class SyncQueue implements QueueInterface
+class MemoryQueue implements QueueInterface
 {
     /**
      * The jobs left in this queue.

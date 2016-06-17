@@ -1,8 +1,8 @@
 <?php
 
-use CDavison\Queue\SyncQueue;
+use CDavison\Queue\MemoryQueue;
 
-class SyncQueueTest extends \PHPUnit_Framework_TestCase
+class MemoryQueueTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * This procedure tests that a queue:
@@ -12,7 +12,7 @@ class SyncQueueTest extends \PHPUnit_Framework_TestCase
      */
     public function testQueueBehaviours()
     {
-        $queue = new SyncQueue();
+        $queue = new MemoryQueue();
 
         $this->assertEquals(0, $queue->count());
 
