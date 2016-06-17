@@ -5,11 +5,7 @@ namespace CDavison\Queue\Dispatchers;
 use CDavison\Queue\QueueInterface;
 use CDavison\Queue\WorkerInterface;
 use Ko\ProcessManager;
-
-function usleep($time)
-{
-    DaemonDispatcherTest::$functions->usleep($time);
-}
+use PHP_Timer as Timer;
 
 class DaemonDispatcherTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,8 +43,6 @@ class DaemonDispatcherTest extends \PHPUnit_Framework_TestCase
         if (!extension_loaded('pcntl')) {
             $this->markTestSkipped('PCNTL extension not available.');
         }
-
-        self::$functions = $this->getMock('functions', ['usleep']);
 
         $this->worker = $this->getMock(WorkerInterface::class);
         $this->queue = $this->getMock(QueueInterface::class);
@@ -88,15 +82,15 @@ class DaemonDispatcherTest extends \PHPUnit_Framework_TestCase
     {
         $dispatcher = new DaemonDispatcher($this->queue, $this->worker, 3);
         $dispatcher->setManager($this->manager);
-
-        self::$functions->expects($this->once())
-            ->method('usleep')
-            ->with($dispatcher->getWorkerTimeout() * 1E3);
+        $dispatcher->setWorkerTimeout(1000);
 
         $this->worker->expects($this->once())->method('run')->with('testing');
 
+        Timer::start();
         $dispatcher->getDispatchAction('testing')->__invoke();
+        $time = Timer::stop();
 
+        $this->assertEquals(1, $time, "Time not within 50ms of target.", 0.050);
         $this->assertEmpty($dispatcher->getManager()->count());
     }
 

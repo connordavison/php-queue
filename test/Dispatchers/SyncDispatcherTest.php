@@ -3,6 +3,7 @@
 use CDavison\Queue\Dispatchers\SyncDispatcher;
 use CDavison\Queue\QueueInterface;
 use CDavison\Queue\WorkerInterface;
+use PHP_Timer as Timer;
 
 class SyncDispatcherTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,10 +35,17 @@ class SyncDispatcherTest extends \PHPUnit_Framework_TestCase
     public function testRun()
     {
         $dispatcher = new SyncDispatcher($this->queue, $this->worker);
+        $dispatcher->setWorkerTimeout(1000);
+
         $this->queue->expects($this->any())->method('count')->willReturn(123);
         $this->queue->expects($this->once())->method('pop')->willReturn('test');
         $this->worker->expects($this->once())->method('run')->with('test');
+
+        Timer::start();
         $dispatcher->run();
+        $time = Timer::stop();
+
+        $this->assertEquals(1, $time, "Time not within 50ms of target.", 0.050);
     }
 
     /**

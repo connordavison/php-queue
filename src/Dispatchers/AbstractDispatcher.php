@@ -34,64 +34,14 @@ abstract class AbstractDispatcher implements DispatcherInterface
      */
     public function __construct(QueueInterface $queue, WorkerInterface $worker)
     {
-        $this->setQueue($queue);
-        $this->setWorker($worker);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return void
-     */
-    abstract public function run();
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param mixed $payload
-     * @return void
-     */
-    abstract public function dispatch($payload);
-
-    /**
-     * Set the queue on which this dispatcher should operate.
-     *
-     * @param QueueInterface $queue
-     */
-    public function setQueue(QueueInterface $queue)
-    {
         $this->queue = $queue;
-    }
-
-    /**
-     * Get the queue on which this dispatcher should operate.
-     *
-     * @return QueueInterface
-     */
-    public function getQueue()
-    {
-        return $this->queue;
-    }
-
-    /**
-     * Set the worker which will complete jobs from the current queue.
-     *
-     * @param WorkerInterface $worker
-     */
-    public function setWorker(WorkerInterface $worker)
-    {
         $this->worker = $worker;
     }
 
     /**
-     * Get the worker which will complete jobs from the current queue.
-     *
-     * @return WorkerInterface
+     * {@inheritdoc}
      */
-    public function getWorker()
-    {
-        return $this->worker;
-    }
+    abstract public function run();
 
     /**
      * Set the timeout in milliseconds before a worker can be redispatched.
