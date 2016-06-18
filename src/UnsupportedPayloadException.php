@@ -12,8 +12,7 @@ class UnsupportedPayloadException extends \UnexpectedValueException
     protected $payload;
 
     /**
-     * Create an UnsupportedPayloadException. This should be thrown when a
-     * worker can't run with a given payload.
+     * Create an UnsupportedPayloadException.
      *
      * @param mixed $payload The payload not supported by the worker.
      * @param string|null $message
