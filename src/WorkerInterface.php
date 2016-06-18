@@ -8,7 +8,6 @@ interface WorkerInterface
      * Run a job on this worker.
      *
      * @param mixed $payload
-     * @throws WorkerBusyException If this worker is busy.
      * @throws UnsupportedPayloadException If the given payload cannot be
      *     successfully consumed.
      * @return void The supplied payload's status should be modified to indicate
